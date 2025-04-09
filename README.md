@@ -1,1 +1,82 @@
-# teest
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel Demo</title>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js"></script>
+  <style>
+    body { font-family: Arial; max-width: 400px; margin: 50px auto; }
+    input, button { width: 100%; margin: 10px 0; padding: 8px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <h2>Admin Login</h2>
+  <div id="login-form">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="admin-panel" class="hidden">
+    <h2>Add Lesson</h2>
+    <input type="text" id="lesson-title" placeholder="Lesson Title">
+    <textarea id="lesson-desc" placeholder="Lesson Description" rows="4"></textarea>
+    <button onclick="addLesson()">Add</button>
+    <p id="msg"></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+  apiKey: "AIzaSyDmoA7Iy85KezXmzbfnSMA32tNrrdg2T38",
+  authDomain: "mora-a8747.firebaseapp.com",
+  projectId: "mora-a8747",
+  storageBucket: "mora-a8747.firebasestorage.app",
+  messagingSenderId: "303935915365",
+  appId: "1:303935915365:web:b4323ef129eeb76bbecd8c",
+  measurementId: "G-FM6KQPB8G3"
+};
+
+    // Init Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Login
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          document.getElementById("login-form").classList.add("hidden");
+          document.getElementById("admin-panel").classList.remove("hidden");
+        })
+        .catch(err => alert("Login Failed: " + err.message));
+    }
+
+    // Add Lesson
+    function addLesson() {
+      const title = document.getElementById("lesson-title").value;
+      const desc = document.getElementById("lesson-desc").value;
+      db.collection("lessons").add({ title, desc, created: new Date() })
+        .then(() => {
+          document.getElementById("msg").textContent = "Lesson added!";
+          document.getElementById("lesson-title").value = "";
+          document.getElementById("lesson-desc").value = "";
+        })
+        .catch(err => alert("Error: " + err.message));
+    }
+
+    // Logout
+    function logout() {
+      auth.signOut().then(() => {
+        document.getElementById("admin-panel").classList.add("hidden");
+        document.getElementById("login-form").classList.remove("hidden");
+      });
+    }
+  </script>
+
