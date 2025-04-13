@@ -1,84 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">mora mo</title>
-  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js"></script>
-  <style>
-    body { font-family: Arial; max-width: 400px; margin: 50px auto; }
-    input, button { width: 100%; margin: 10px 0; padding: 8px; }
-    .hidden { display: none; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة العمليات التعليمية</title>
+    <style>
+        :root {
+            --primary-color: #6D1865;
+            --secondary-color: #2c3e50;
+            --accent-color: #718e97;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* تحسينات الشريط العلوي */
+        nav {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* تحسينات المحتوى الرئيسي */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* تحسينات قسم الصفحة الرئيسية */
+        #home {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        #home img {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        #home img:hover {
+            transform: scale(1.05);
+        }
+        
+        #home h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        /* تحسينات قسم الفيديوهات */
+        .video-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .video-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        /* تحسينات قائمة اختيار الفيديوهات */
+        #videoSelector {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #videoSelector:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(109, 24, 101, 0.2);
+        }
+        
+        /* تحسينات عرض الفيديوهات */
+        .video {
+            display: none;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .video-title {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .video iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-bottom: 1rem;
+        }
+        
+        /* تحسينات قسم الاتصال */
+        #contact {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        #contact h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        #contact p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        #contact a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        #contact a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-icons a {
+            transition: transform 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-icons img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* تحسينات نموذج تسجيل الدخول */
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .login-container img {
+            max-width: 200px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-container h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .login-container label {
+            display: block;
+            text-align: right;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: bold;
+        }
+        
+        .login-container input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-container input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(109, 24, 101, 0.2);
+        }
+        
+        .login-container button {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-container button:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .error {
+            color: var(--danger-color);
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        
+        /* تحسينات للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            nav ul li a {
+                font-size: 0.9rem;
+                padding: 0.3rem 0.6rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+            
+            .video iframe {
+                height: 300px;
+            }
+            
+            .login-container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+        }
+        
+        /* تحسينات إضافية */
+        .developer-credit {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+        
+        .developer-credit a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .developer-credit a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    
+    
+    <main id="main" style="display:none;">
+        <section id="home">
+            <div style="text-align: center;">
+                <img src="https://i.ibb.co/59zvgNq/image-removebg-preview-6-removebg-preview-1.png" alt="منصة العمليات التعليمية">
+                <h2>The Process Platform</h2>
+                <p style="color: var(--secondary-color); margin-top: 1rem;">"كل ثانية بتذاكر فيها دلوقتي، بتقربك خطوة من حلمك. خليك قوي، وافتكر دايمًا إن التعب بيروح، لكن النتيجة بتفضل."
+                بالتوفيق يا ريس ❤️</p>
+            </div>
+        </section>
 
-  <h2>Admin Login</h2>
-  <div id="login-form">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-  </div>
+        <section id="videos" class="video-container">
+            <!-- سيتم تعبئة هذا القسم تلقائيا بعد تسجيل الدخول -->
+            <div style="text-align: center; padding: 2rem;">
+                <h3>مرحبًا بك في منصة الفيديوهات التعليمية</h3>
+                <p>الرجاء تسجيل الدخول لعرض المحتوى التعليمي المتاح لك</p>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or need further information, feel free to contact us at</p>
+            <p><a href="mailto:mamrro8529@gmail.com">mamrro8529@gmail.com</a></p>
+            
+            <div class="social-icons">
+                <a href="https://wa.me/message/5LRM2DVHPZQFM1" target="_blank" aria-label="واتساب">
+                    <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="واتساب">
+                </a>
+                <a href="https://www.facebook.com/mamro8529?mibextid=ZbWKwL" target="_blank" aria-label="فيسبوك">
+                    <img src="https://img.icons8.com/color/48/000000/facebook.png" alt="فيسبوك">
+                </a>
+                <a href="http://t.me/Mora_mo1" target="_blank" aria-label="تلجرام">
+                    <img src="https://img.icons8.com/color/48/000000/telegram-app.png" alt="تلجرام">
+                </a>
+            </div>
+            
+            <div class="developer-credit">
+                <p>Developed by <a href="mailto:mamrro8529@gmail.com">Eng: Amr Mohamed</a></p>
+            </div>
+        </section>
+    </main>
 
-  <div id="admin-panel" class="hidden">
-    <h2>Add Lesson</h2>
-    <input type="text" id="lesson-title" placeholder="Lesson Title">
-    <textarea id="lesson-desc" placeholder="Lesson Description" rows="4"></textarea>
-    <button onclick="addLesson()">Add</button>
-    <p id="msg"></p>
-    <button onclick="logout()">Logout</button>
-  </div>
+    <div class="login-container" id="loginContainer">
+        <img src="https://i.ibb.co/nmgZDmT/Whats-App-Image-2024-09-04-at-15-05-46-removebg-preview.png" alt="تسجيل الدخول">
+        <h1>Login to The Process platform</h1>
+        <form id="loginForm">
+            <label for="username">username</label>
+            <input type="text" id="username" name="username" required placeholder="أدخل كود الدخول">
+            <button type="submit">دخول</button>
+            <div id="errorMessage" class="error"></div>
+        </form>
+        <div class="developer-credit" style="margin-top: 1.5rem;">
+                <p>Developed by <a href="mailto:mamrro8529@gmail.com">Eng: Amr Mohamed</a></p>
+        </div>
+    </div>
 
-  <script>
-    // Firebase Config
-    const firebaseConfig = {
-  apiKey: "AIzaSyDmoA7Iy85KezXmzbfnSMA32tNrrdg2T38",
-  authDomain: "mora-a8747.firebaseapp.com",
-  projectId: "mora-a8747",
-  storageBucket: "mora-a8747.firebasestorage.app",
-  messagingSenderId: "303935915365",
-  appId: "1:303935915365:web:b4323ef129eeb76bbecd8c",
-  measurementId: "G-FM6KQPB8G3"
-};
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginContainer = document.getElementById('loginContainer');
+            const mainContent = document.getElementById('main');
+            const videoContainer = document.getElementById('videos');
 
-    // Init Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+            function showLogin() {
+                loginContainer.style.display = 'block';
+                mainContent.style.display = 'none';
+            }
 
-    // Login
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          document.getElementById("login-form").classList.add("hidden");
-          document.getElementById("admin-panel").classList.remove("hidden");
-        })
-        .catch(err => alert("Login Failed: " + err.message));
-    }
+            function showMainContent() {
+                loginContainer.style.display = 'none';
+                mainContent.style.display = 'block';
+            }
 
-    // Add Lesson
-    function addLesson() {
-      const title = document.getElementById("lesson-title").value;
-      const desc = document.getElementById("lesson-desc").value;
-      db.collection("lessons").add({ title, desc, created: new Date() })
-        .then(() => {
-          document.getElementById("msg").textContent = "Lesson added!";
-          document.getElementById("lesson-title").value = "";
-          document.getElementById("lesson-desc").value = "";
-        })
-        .catch(err => alert("Error: " + err.message));
-    }
+            function loadVideoContent(code) {
+                let videoHTML = '';
 
-    // Logout
-    function logout() {
-      auth.signOut().then(() => {
-        document.getElementById("admin-panel").classList.add("hidden");
-        document.getElementById("login-form").classList.remove("hidden");
-      });
-    }
-  </script>
+                if (code === 'CODE1') {
+                    videoHTML = `
+                        <h2>  الفصل الثاني</h2>
+                        <select id="videoSelector" class="form-select">
+                            <option value="video0">اختر الفيديو...</option>
+                            <option value="video1">شرح الفصل الثاني (الجزء الأول)</option>
+                            <option value="video2">شرح الفصل الثاني (الجزء الثاني)</option>
+                            <option value="video3">شرح الفصل الثاني (الجزء الثالث)</option>
+                            <option value="video4">تدريبات الدرس الأول</option>
+                            <option value="video5">تدريبات الدرس الثاني</option>
+                            <option value="video6">تدريبات الدرس الثالث</option>
+                            <option value="video7">تدريبات الدرس الرابع</option>
+                        </select>
+                        
+                        <div class="video" id="video1">
+                            <h3 class="video-title">شرح الفصل الثاني (الجزء الأول)</h3>
+                            <iframe src="https://drive.google.com/file/d/1JsbhZ8UWhqh9p2RlecTBrCa5L_8vgJCR/preview" allowfullscreen></iframe>
+                        </div>
 
+                        <div class="video" id="video2">
+                            <h3 class="video-title">شرح الفصل الثاني (الجزء الثاني)</h3>
+                            <iframe src="https://drive.google.com/file/d/1fOeP-_8VgSYQkiR5BeMhL0Xt422Wv7Vc/preview" allowfullscreen></iframe>
+                        </div>
+                        
+                        <div class="video" id="video3">
+                            <h3 class="video-title">شرح الفصل الثاني (الجزء الثالث)</h3>
+                            <iframe src="https://drive.google.com/file/d/17dQEtszqYpmPmpU3GKYfsiyjGmwCHKhq/preview" allowfullscreen></iframe>
+                        </div>
+                     
+                        <div class="video" id="video4">
+                            <h3 class="video-title">تدريبات الدرس الأول</h3>
+                            <h4 class="video-part">الجزء الأول</h4>
+                            <iframe src="https://drive.google.com/file/d/1Xafno2FXrklMu3N5udbsb_FAPQwQI0Na/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثاني</h4>
+                            <iframe src="https://drive.google.com/file/d/1Uqmcfk2Ujoq2X_u8-6K3MTIA7B9NQ-RY/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثالث</h4>
+                            <iframe src="https://drive.google.com/file/d/1b4NmhBy8VpzKk4wl0ktq9CvVDU5RVhgJ/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الرابع</h4>
+                            <iframe src="https://drive.google.com/file/d/1oYsLZZQhUABeYI9aH2Ac1_eewUfYOC1D/preview" allowfullscreen></iframe>
+                        </div>
+                        
+                        <div class="video" id="video5">
+                            <h3 class="video-title">تدريبات الدرس الثاني</h3>
+                            <h4 class="video-part">الجزء الأول</h4>
+                            <iframe src="https://drive.google.com/file/d/1n8VJZWh6MZLM5EJZoydah6GQzsvpx_pN/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثاني</h4>
+                            <iframe src="https://drive.google.com/file/d/1XcTlpD_pOpFchYzye_OzLf54RoxlfVWl/preview" allowfullscreen></iframe>
+                        </div>
+                        
+                        <div class="video" id="video6">
+                            <h3 class="video-title">تدريبات الدرس الثالث</h3>
+                            <h4 class="video-part">الجزء الأول</h4>
+                            <iframe src="https://drive.google.com/file/d/1FSiqPd1aI2N6ObTw1IqskrkkT5A3wDeV/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثاني</h4>
+                            <iframe src="https://drive.google.com/file/d/18uhR-4gz7w9Npu9Ronztyu-IMukHurld/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثالث</h4>
+                            <iframe src="https://drive.google.com/file/d/1B0R8m9BavCxYEtXOz1qMHiQMEHqCebAA/preview" allowfullscreen></iframe>
+                        </div>
+                        
+                        <div class="video" id="video7">
+                            <h3 class="video-title">تدريبات الدرس الرابع</h3>
+                            <h4 class="video-part">الجزء الأول</h4>
+                            <iframe src="https://drive.google.com/file/d/11MiD_5E587CPRDIRi4j6nMth61_8YbiW/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثاني</h4>
+                            <iframe src="https://drive.google.com/file/d/1hSEX0DJvQTrggrkmtIm0NxyoEFvd_RN4/preview" allowfullscreen></iframe>
+                            
+                            <h4 class="video-part">الجزء الثالث</h4>
+                            <iframe src="https://drive.google.com/file/d/17czArTr3Mms54nFtW00TIeA8PHAS-vpc/preview" allowfullscreen></iframe>
+                        </div>
+                    `;
+                } 
+                // ... (بقية الأكواد الأخرى CODE2, CODE3, CODE4, CODE5 بنفس النمط المحسن)
+                
+                videoContainer.innerHTML = videoHTML;
+
+                const videoSelector = document.getElementById('videoSelector');
+                if (videoSelector) {
+                    videoSelector.addEventListener('change', function () {
+                        const selectedVideo = videoSelector.value;
+                        const videos = document.querySelectorAll('.video');
+                        videos.forEach(video => video.style.display = 'none');
+                        const videoToShow = document.getElementById(selectedVideo);
+                        if (videoToShow) {
+                            videoToShow.style.display = 'block';
+                        }
+                    });
+                }
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const username = document.getElementById('username').value.trim();
+                const errorMessage = document.getElementById('errorMessage');
+
+                const validUsernames = {
+                    'CODE1': ['45454', '18234', '19543', '52614', '51367', '74659', '76431', '63824', '72904', '52918', '84957', '71945', '83629', '38241', '47285', '29067', '94185', '90576', '35926', '83415', '47623', '63172', '81023', '67892', '85297', '24785', '74381', '90283', '19473'],
+                    'CODE2': ['45454', '13227', '66100', '51089', '42877', '92584', '81807', '29699', '96915', '83933', '15134', '85643', '99949', '20995', '39094', '41661', '49757', '52293', '65639', '16495', '17290', '15417', '84597', '16833', '34244', '16228', '57031', '59657', '31693'],
+                    'CODE3': ['85800', '64622', '48007', '45427', '93111', '99452', '60560', '56689', '13885', '30329', '12103', '18638', '35358', '79862', '40574', '22080', '93577', '75673', '66981', '20482', '62787', '96462', '31451', '89339', '12833', '81447', '96579', '31230'],
+                    'CODE4': ['23218', '74138', '59055', '40555', '50599','42923', '62461', '53810', '20534', '42979', '34383', '98406', '14639', '92421', '20267', '26378', '12506','39637', '37625', '11908','51746', '70910', '10852', '56540', '99246', '85281', '37906', '38005', '94620', '99935'],
+                    'CODE5': ['98098', '76246', '12587', '85315', '71752','67905', '35117', '35952', '58172', '19458','69346', '94261', '56608', '50147', '67135','83732', '99279', '52983', '18375', '51392','72980', '53608', '28558', '21305', '70518','58816', '35284', '66266', '64917', '53633']
+                };
+
+                let code = '';
+                for (const [key, values] of Object.entries(validUsernames)) {
+                    if (values.includes(username)) {
+                        code = key;
+                        break;
+                    }
+                }
+
+                if (code) {
+                    errorMessage.textContent = '';
+                    loadVideoContent(code);
+                    showMainContent();
+                    
+                    // Scroll to videos section
+                    document.getElementById('videos').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    errorMessage.textContent = 'كود الدخول غير صحيح، الرجاء المحاولة مرة أخرى';
+                }
+            });
+
+            showLogin();
+        });
+    </script>
 </body>
 </html>
