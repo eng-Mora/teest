@@ -920,5 +920,29 @@
             showLogin();
         });
     </script>
+        
+<script>ِ
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.todo-table input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            // Assign unique ID if not present
+            if (!checkbox.id) {
+                checkbox.id = task-${index};
+            }
+
+            // Load saved state
+            const savedState = localStorage.getItem(checkbox.id);
+            if (savedState !== null) {
+                checkbox.checked = savedState === 'true';
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(checkbox.id, checkbox.checked);
+            });
+        });
+    });
+</script>
 </body>
 </html>
