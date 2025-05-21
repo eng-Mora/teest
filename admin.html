@@ -336,7 +336,7 @@
             border-radius: 10px;
             border: 1px solid #ccc;
             outline: none;
-            font-weight: bold; /* Added bold font for username input */
+            font-weight: bold;
         }
 
         .icon {
@@ -358,21 +358,21 @@
         .login-btn {
             background-color: #800000;
             color: #fff;
-            padding: 16px; /* Increased padding for bigger button */
+            padding: 16px;
             border: none;
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 20px;
-            font-size: 1.1rem; /* Increased font size */
-            width: 100%; /* Full width button */
+            font-size: 1.1rem;
+            width: 100%;
             transition: all 0.3s ease;
         }
 
         .login-btn:hover {
-            background-color: #6d0000; /* Darker shade on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow */
+            background-color: #6d0000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .or {
@@ -427,6 +427,85 @@
             margin-top: 1rem;
             font-weight: bold;
             text-align: center;
+        }
+
+        /* To-Do List Styles */
+        .todo-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-size: 1.5rem;
+            display: none; /* Hidden by default */
+        }
+
+        .todo-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 350px;
+            max-height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .todo-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .todo-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .todo-table th, .todo-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .todo-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .todo-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .todo-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: var(--danger-color);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .todo-container {
+                width: 90%;
+                right: 5%;
+                bottom: 100px;
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -498,24 +577,179 @@
 
                 <div class="social-icons">
                     <button style="background-color: transparent; border: none; padding: 10px;">
-  <a href="https://www.facebook.com/mamro8529?mibextid=ZbWKwL" target="_blank" style="color: black; font-size: 30px;">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-</button>
-<button style="background-color: transparent; border: none; padding: 10px;">
-  <a href="https://wa.me/message/5LRM2DVHPZQFM1" target="_blank" style="color: black; font-size: 30px;">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-</button>
-<button style="background-color: transparent; border: none; padding: 10px;">
-  <a href="http://t.me/Mora_mo1" target="_blank" style="color: black; font-size: 30px;">
-    <i class="fab fa-telegram-plane"></i>
-  </a>
-</button>
-
+                        <a href="https://www.facebook.com/mamro8529?mibextid=ZbWKwL" target="_blank" style="color: black; font-size: 30px;">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </button>
+                    <button style="background-color: transparent; border: none; padding: 10px;">
+                        <a href="https://wa.me/message/5LRM2DVHPZQFM1" target="_blank" style="color: black; font-size: 30px;">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </button>
+                    <button style="background-color: transparent; border: none; padding: 10px;">
+                        <a href="http://t.me/Mora_mo1" target="_blank" style="color: black; font-size: 30px;">
+                            <i class="fab fa-telegram-plane"></i>
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- To-Do List Elements -->
+    <div class="todo-icon" id="todoIcon">
+        <i class="fas fa-tasks"></i>
+    </div>
+
+    <div class="todo-container" id="todoContainer">
+        <span class="todo-close" id="todoClose">&times;</span>
+        <h3>Study Plan</h3>
+        <table class="todo-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>المهمة</th>
+                    <th>✅ تم الإنجاز؟</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>25/6</td>
+                    <td>Revision chapter 5 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>25/6</td>
+                    <td>Exercise chapter 5 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>25/6</td>
+                    <td>Practicing chapter 5 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>25/6</td>
+                    <td>Revision chapter 6 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>25/6</td>
+                    <td>Exercise chapter 6 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>25/6</td>
+                    <td>Practicing chapter 6 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Revision chapter 7 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Exercise chapter 7 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Practicing chapter 7 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Revision chapter 8 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Exercise chapter 8 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Practicing chapter 8 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Revision chapter 1 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Exercise chapter 1 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>26/6</td>
+                    <td>Practicing chapter 1 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Lecture On Modern Physics Tips and Tricks in Centre (10:00Am)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Revision chapter 2 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Exercise chapter 2 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Practicing chapter 2 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Revision chapter 3 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Exercise chapter 3 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Practicing chapter 3 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Revision chapter 4 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Exercise chapter 4 video</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>27/6</td>
+                    <td>Practicing chapter 4 (USE YOUR HANDS PLEEEAAASE)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>28/6</td>
+                    <td>Lecture On electrical Physics Tips and Tricks in Centre (10:00Am)</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>28/6</td>
+                    <td>Solving AAALLLL Booklets in the package</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -523,15 +757,21 @@
             const loginContainer = document.getElementById('loginContainer');
             const mainContent = document.getElementById('main');
             const videoContainer = document.getElementById('videos');
+            const todoIcon = document.getElementById('todoIcon');
+            const todoContainer = document.getElementById('todoContainer');
+            const todoClose = document.getElementById('todoClose');
 
             function showLogin() {
                 loginContainer.style.display = 'flex';
                 mainContent.style.display = 'none';
+                todoIcon.style.display = 'none';
+                todoContainer.style.display = 'none';
             }
 
             function showMainContent() {
                 loginContainer.style.display = 'none';
                 mainContent.style.display = 'block';
+                todoIcon.style.display = 'flex';
             }
 
             function loadVideoContent(code) {
@@ -633,6 +873,15 @@
                     });
                 }
             }
+
+            // To-Do List functionality
+            todoIcon.addEventListener('click', function() {
+                todoContainer.style.display = 'block';
+            });
+
+            todoClose.addEventListener('click', function() {
+                todoContainer.style.display = 'none';
+            });
 
             document.getElementById('loginForm').addEventListener('submit', function (event) {
                 event.preventDefault();
