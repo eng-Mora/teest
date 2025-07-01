@@ -689,8 +689,38 @@
             const loginContainer = document.getElementById('loginContainer');
             const mainContent = document.getElementById('main');
             const videoContainer = document.getElementById('videos');
-            let currentUsername = '';
+            
+            // كائن يحتوي على بيانات جميع الطلاب
+            const studentsData = {
+                '45454': {
+                    name: 'عمرو محمد عبدالمنعم',
+                    phone: '01011717876',
+                    email: 'mamro8529@gmail.com',
+                    language: 'عربي',
+                    image: 'https://i.imgur.com/JqYeS5n.jpg',
+                    welcomeMessage: '☝🏽شد حيلك يا باشا… دي آخر محطة قبل الحلم الكبير'
+                },
+                '18234': {
+                    name: 'طالب آخر',
+                    phone: '01000000000',
+                    email: 'student@example.com',
+                    language: 'عربي',
+                    image: 'https://example.com/student.jpg',
+                    welcomeMessage: 'مرحباً بك في المنصة التعليمية'
+                },
+                // يمكنك إضافة المزيد من الطلاب هنا
+                '19543': {
+                    name: 'محمد أحمد',
+                    phone: '01111111111',
+                    email: 'mohamed@example.com',
+                    language: 'عربي',
+                    image: 'https://example.com/mohamed.jpg',
+                    welcomeMessage: 'أهلاً بك في منصتنا التعليمية'
+                }
+            };
 
+            // كود الدوال الأخرى كما هو...
+            
             function showLogin() {
                 loginContainer.style.display = 'flex';
                 mainContent.style.display = 'none';
@@ -702,33 +732,39 @@
             }
 
             function loadVideoContent(code, username) {
-                let videoHTML = '';
-                let welcomeBanner = '';
+                // الحصول على بيانات الطالب أو استخدام بيانات افتراضية إذا لم يكن موجوداً
+                const student = studentsData[username] || {
+                    name: 'طالب جديد',
+                    phone: 'غير متوفر',
+                    email: 'غير متوفر',
+                    language: 'عربي',
+                    image: 'https://via.placeholder.com/60',
+                    welcomeMessage: 'مرحباً بك في المنصة التعليمية'
+                };
 
-                // رسالة الترحيب الخاصة للكود 45454
-                if (username === '45454') {
-                    welcomeBanner = `
-                    <div class="welcome-banner">
-                        <div class="welcome-text">
-                            <h3>مرحباً عمرو محمد</h3>
-                            <p> ☝🏽شد حيلك يا باشا… دي آخر محطة قبل الحلم الكبير </p>
-                        </div>
-                        <div class="profile-img-container">
-                            <img src="https://i.imgur.com/JqYeS5n.jpg" alt="صورة البروفايل">
-                            <div class="show-details">اظهار التفاصيل</div>
-                            <div class="profile-info" id="profileInfo">
-                                <p><strong>الاسم:</strong> عمرو محمد عبدالمنعم</p>
-                                <p><strong>رقم التليفون:</strong> 01011717876</p>
-                                <p><strong>البريد الإلكتروني:</strong> mamro8529@gmail.com</p>
-                                <p><strong>لغة الدراسة:</strong> عربي</p>
-                            </div>
+                const welcomeBanner = `
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h3>مرحباً ${student.name}</h3>
+                        <p>${student.welcomeMessage}</p>
+                    </div>
+                    <div class="profile-img-container">
+                        <img src="${student.image}" alt="صورة البروفايل">
+                        <div class="show-details">اظهار التفاصيل</div>
+                        <div class="profile-info" id="profileInfo">
+                            <p><strong>الاسم:</strong> ${student.name}</p>
+                            <p><strong>رقم التليفون:</strong> ${student.phone}</p>
+                            <p><strong>البريد الإلكتروني:</strong> ${student.email}</p>
+                            <p><strong>لغة الدراسة:</strong> ${student.language}</p>
                         </div>
                     </div>
-                    `;
-                }
+                </div>
+                `;
 
+                let videoHTML = welcomeBanner;
+                
                 if (code === 'CODE1') {
-                    videoHTML = welcomeBanner + `
+                    videoHTML += `
                         <h2>الفصل الثاني</h2>
                         <select id="videoSelector" class="form-select">
                             <option value="video0">اختر الفيديو...</option>
@@ -805,8 +841,6 @@
                         </div>
                     `;
                 } 
-
-                // ... (rest of the codes CODE2, CODE3, CODE4, CODE5 in the same improved pattern)
                 
                 videoContainer.innerHTML = videoHTML;
 
@@ -847,10 +881,9 @@
 
                 const username = document.getElementById('username').value.trim();
                 const errorMessage = document.getElementById('errorMessage');
-                currentUsername = username;
 
                 const validUsernames = {
-                    'CODE1': ['45454', '18234', '19543', '52614', '51367', '74659', '76431', '63824', '72904', '52918', '84957', '71945', '83629', '38241', '47285', '29067', '94185', '90576', '35926', '83415', '47623', '63172', '81023', '67892', '85297', '24785', '74381', '90283', '19473'],
+                    'CODE1': ['45454']
                 };
 
                 let code = '';
