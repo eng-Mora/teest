@@ -520,4 +520,32 @@ main {
     }
 
     .form-container {
-  
+        flex-direction: column;
+    }
+
+    .left-section, .right-section {
+        border-radius: 0;
+        padding: 40px 20px;
+    }
+
+    .left-section {
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+    }
+
+    .right-section {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .social-login-btns {
+        flex-direction: column;
+    }
+}
+
+.error {
+    color: var(--danger-color);
+    margin-top: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
