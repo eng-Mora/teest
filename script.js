@@ -179,15 +179,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            if (code) {
-                if (errorMessage) errorMessage.textContent = '';
-                loadVideoContent(code, username);
-                showMainContent();
-                
-                // Scroll to videos section
-                if (document.getElementById('videos')) {
-                    document.getElementById('videos').scrollIntoView({ behavior: 'smooth' });
-                }
+           if (code) {
+    if (errorMessage) errorMessage.textContent = '';
+
+    localStorage.setItem("loggedIn", "true");
+
+    window.location.href = "index.html";
+}
+
             } else {
                 if (errorMessage) errorMessage.textContent = 'Invalid access code, please try again';
             }
