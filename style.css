@@ -77,6 +77,7 @@ main {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.5s ease;
     position: relative;
+    direction: rtl;
 }
 
 .welcome-banner img {
@@ -137,6 +138,20 @@ main {
 
 .profile-info p strong {
     color: var(--primary-color);
+}
+
+.show-details {
+    color: white;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 5px;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.show-details:hover {
+    color: #f0f0f0;
 }
 
 /* Home section styles */
@@ -306,18 +321,27 @@ main {
     }
 
     .welcome-banner {
-        flex-direction: column;
-        text-align: center;
+        flex-direction: row;
+        align-items: center;
+        text-align: right;
+        padding: 1rem;
     }
 
     .welcome-banner img {
-        margin: 10px 0 0 0;
+        margin: 0 0 0 1rem;
+        width: 50px;
+        height: 50px;
+    }
+
+    .welcome-text {
+        text-align: right;
+        flex: 1;
     }
 
     .profile-info {
         width: 200px;
-        right: 50%;
-        transform: translateX(50%);
+        right: 0;
+        transform: none;
     }
 }
 
@@ -475,6 +499,7 @@ main {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-size: 0.9rem;
 }
 
 .social-btn.google {
@@ -539,7 +564,14 @@ main {
     }
 
     .social-login-btns {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .social-btn {
+        min-width: 48%;
+        font-size: 0.8rem;
+        padding: 10px;
     }
 }
 
