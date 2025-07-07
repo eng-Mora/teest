@@ -1,3 +1,7 @@
+if (!localStorage.getItem("loggedIn") || localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const loginContainer = document.getElementById('loginContainer');
     const mainContent = document.getElementById('main');
