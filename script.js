@@ -1,6 +1,10 @@
-if (!localStorage.getItem("loggedIn") || localStorage.getItem("loggedIn") !== "true") {
+const path = window.location.pathname;
+const isHomePage = path === "/teest/" || path.endsWith("/index.html");
+
+if (isHomePage && localStorage.getItem("loggedIn") !== "true") {
     window.location.href = "login.html";
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const loginContainer = document.getElementById('loginContainer');
