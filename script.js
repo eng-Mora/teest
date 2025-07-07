@@ -1,7 +1,7 @@
+// منع دخول مباشر لـ index.html / root من غير تسجيل دخول
 const path = window.location.pathname;
-const isHomePage = path === "/teest/" || path.endsWith("/index.html");
-
-if (isHomePage && localStorage.getItem("loggedIn") !== "true") {
+const isHome = path === "/teest/" || path.endsWith("/teest/index.html");
+if (isHome && localStorage.getItem("loggedIn") !== "true") {
     window.location.href = "login.html";
 }
 
